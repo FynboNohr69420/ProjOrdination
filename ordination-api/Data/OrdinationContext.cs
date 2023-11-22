@@ -1,8 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using shared.Model;
 
-// Comment for new branch
-
 namespace Data
 {
     public class OrdinationContext : DbContext
