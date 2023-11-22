@@ -4,6 +4,7 @@ using System.Text.Json;
 using shared.Model;
 using static shared.Util;
 using Data;
+using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 
 namespace Service;
 
@@ -137,9 +138,16 @@ public class DataService
 
     public DagligFast OpretDagligFast(int patientId, int laegemiddelId, 
         double antalMorgen, double antalMiddag, double antalAften, double antalNat, 
-        DateTime startDato, DateTime slutDato) {
+        DateTime startDato, DateTime slutDato)
+    {
+        Patient p = db.Patienter.Find(patientId);
+        Laegemiddel l = db.Laegemiddler.Find(laegemiddelId);
 
-        // TODO: Implement!
+        DagligFast k = new DagligFast(startDato, slutDato, l, antalMorgen, antalMiddag, antalAften, antalNat);
+
+        p.ordinationer.Add(k);
+        db.SaveChanges();
+        
         return null!;
     }
 
