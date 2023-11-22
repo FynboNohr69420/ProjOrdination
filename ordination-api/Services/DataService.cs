@@ -148,7 +148,7 @@ public class DataService
         p.ordinationer.Add(k);
         db.SaveChanges();
         
-        return null!;
+        return k;
     }
 
     public DagligSkæv OpretDagligSkaev(int patientId, int laegemiddelId, Dosis[] doser, DateTime startDato, DateTime slutDato) {
