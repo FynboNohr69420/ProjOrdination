@@ -187,8 +187,24 @@ public class DataService
     }
 
     public DagligSkæv OpretDagligSkaev(int patientId, int laegemiddelId, Dosis[] doser, DateTime startDato, DateTime slutDato) {
-        // TODO: Implement!
-        return null!;
+        // Hent patienten / lægemidlet fra databasen baseret på id
+        Patient patient = db.Patienter.FirstOrDefault(p => p.PatientId == patientId)!;
+        Laegemiddel laegemiddel = db.Laegemiddler.FirstOrDefault(l => l.LaegemiddelId == laegemiddelId)!;
+
+        // Hvis patient eller lægemiddel ikke findes, så smid en exception
+        if (patient == null || laegemiddel == null)
+        {
+            // Håndter fejlen, f.eks. ved at returnere null eller kaste en exception
+            throw new Exception("Fejl: Patient eller lægemiddel ikke fundet i databasen.");
+        }
+
+        DagligSkæv nyDagligSkæv = new DagligSkæv(startDato, slutDato, laegemiddel, doser);
+
+        patient.ordinationer.Add(nyDagligSkæv);
+        db.SaveChanges();
+
+        return nyDagligSkæv;
+        
     }
 
     public string AnvendOrdination(int id, Dato dato) {
