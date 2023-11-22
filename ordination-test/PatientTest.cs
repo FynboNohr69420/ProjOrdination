@@ -9,7 +9,7 @@ public class PatientTest
     [TestMethod]
     public void PatientHasName()
     {
-        string cpr = "160563-1234";
+        string cpr = "160563-1234"; // dette er et cpr nummer
         string navn = "John";
         double vægt = 83;
         
