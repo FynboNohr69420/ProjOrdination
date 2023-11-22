@@ -22,7 +22,16 @@ public class PN : Ordination {
     }
 
     public override double doegnDosis() {
-    	// TODO: Implement!
+    	//double sum = 0;
+
+        //if(dates.Count() > 0)
+        //{
+        //   DateTime min = datesFirst().dato;
+        //   DateTime max = datesLast().dato;
+
+        //   foreach
+
+        //}
         return -1;
     }
 
