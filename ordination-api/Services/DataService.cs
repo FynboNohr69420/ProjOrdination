@@ -154,8 +154,6 @@ public class DataService
         p.ordinationer.Add(k);
         db.SaveChanges();
 
-        //Tilføj evt. exception
-
         return k;
 
     }
