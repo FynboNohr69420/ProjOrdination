@@ -13,7 +13,7 @@ public class ApiService
     private readonly IConfiguration configuration;
     private readonly string baseAPI = "";
     public event Action? RefreshRequired;
-    //hej
+
     public ApiService(HttpClient http, IConfiguration configuration)
     {
         this.http = http;
