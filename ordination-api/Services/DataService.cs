@@ -206,10 +206,25 @@ public class DataService
         return nyDagligSkæv;
         
     }
-
+    //Har været i gang med denne, men ved ikke hvad den skal udføre lol, lige nu kommer den bare med tekst output
     public string AnvendOrdination(int id, Dato dato) {
-        // TODO: Implement!
-        return null!;
+
+        Ordination ordination = db.Ordinationer.FirstOrDefault(o => o.OrdinationId == id)!;
+
+        if (ordination == null)
+        {
+            throw new Exception("Fejl: Ordination ikke fundet.");
+        }
+
+
+        DateTime datoDateTime = dato.dato;
+
+        if (datoDateTime < ordination.startDen || datoDateTime > ordination.slutDen)
+        {
+            return "Fejl: Dato uden for gyldighedsperiode.";
+        }
+
+        return "Ordination anvendt succesfuldt.";
     }
 
     /// <summary>
@@ -219,6 +234,8 @@ public class DataService
     /// <param name="patient"></param>
     /// <param name="laegemiddel"></param>
     /// <returns></returns>
+    /// 
+
 	public double GetAnbefaletDosisPerDøgn(int patientId, int laegemiddelId) {
         // TODO: Implement!
         return -1;
