@@ -218,6 +218,7 @@ public class DataService
             throw new Exception("Fejl: Ordination ikke fundet.");
         }
 
+        
 
         DateTime datoDateTime = dato.dato;
 
@@ -225,6 +226,11 @@ public class DataService
         {
             return "Fejl: Dato uden for gyldighedsperiode.";
         }
+
+        PN pnOrdination = ordination as PN;
+
+        pnOrdination.dates.Add(dato);
+        db.SaveChanges();
 
         return "Ordination anvendt succesfuldt.";
     }
