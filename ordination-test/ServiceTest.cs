@@ -30,6 +30,8 @@ public class ServiceTest
     [TestMethod]
     public void OpretDagligFast()
     {
+        DateTime dateInPast = new DateTime(2023, 11, 23, 0, 0, 0);
+
         Patient patient = service.GetPatienter().First();
         Laegemiddel lm = service.GetLaegemidler().First();
 
@@ -39,7 +41,13 @@ public class ServiceTest
             2, 2, 1, 0, DateTime.Now, DateTime.Now.AddDays(3));
 
         Assert.AreEqual(2, service.GetDagligFaste().Count());
+
+        // Kast Exception hvis dato ligger før dags dato
+        Assert.ThrowsException<InvalidOperationException>(() =>
+            service.OpretDagligFast(2, lm.LaegemiddelId, 2, 2, 1, 0, dateInPast, DateTime.Now.AddDays(3)));
+
     }
+
 
     [TestMethod]
     public void TestAtKodenSmiderEnException()
@@ -54,5 +62,7 @@ public class ServiceTest
 
         Assert.ThrowsException<ArgumentNullException>(() =>
             service.OpretDagligFast(null, lm.LaegemiddelId, 2, 2, 1, 0, DateTime.Now, DateTime.Now.AddDays(3)));
+
+        
     }
 }

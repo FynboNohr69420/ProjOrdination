@@ -170,6 +170,10 @@ public class DataService
         {
             throw new ArgumentNullException("Enten patient eller lægemiddel findes ikke");
         }
+        if (startDato < DateTime.Today)
+        {
+            throw new InvalidOperationException("Ordineringen kan ikke have startdato i fortiden");
+        }
 
         Patient p = db.Patienter.Find(patientId)!;
         Laegemiddel l = db.Laegemiddler.Find(laegemiddelId)!;
@@ -235,8 +239,31 @@ public class DataService
     /// 
 
 	public double GetAnbefaletDosisPerDøgn(int patientId, int laegemiddelId) {
-        // TODO: Implement!
-        return -1;
+
+        Patient patient = db.Patienter.FirstOrDefault(p => p.PatientId == patientId)!;
+
+        Laegemiddel laegemiddel = db.Laegemiddler.FirstOrDefault(l => l.LaegemiddelId == laegemiddelId)!;
+
+        double patientVægt = patient.vaegt;
+
+        double anbefaletDosis;
+
+        if (patientVægt < 25)
+        {
+            anbefaletDosis = patientVægt * laegemiddel.enhedPrKgPrDoegnLet;
+
+        }
+        else if (patientVægt >= 25 && patientVægt <= 125)
+        {
+            anbefaletDosis = patientVægt * laegemiddel.enhedPrKgPrDoegnNormal;
+
+        }
+        else
+        {
+            anbefaletDosis = patientVægt * laegemiddel.enhedPrKgPrDoegnTung;
+        }
+
+        return anbefaletDosis;
 	}
     
 }
