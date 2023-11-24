@@ -165,14 +165,14 @@ public class DataService
         double antalMorgen, double antalMiddag, double antalAften, double antalNat, 
         DateTime startDato, DateTime slutDato)
     {
-
+        //Bruges kun MÅSKE på et underligt api kald??
         if (patientId == null || laegemiddelId == null)
         {
             throw new ArgumentException("Enten patient eller lægemiddel findes ikke");
         }
 
-        Patient p = db.Patienter.Find(patientId);
-        Laegemiddel l = db.Laegemiddler.Find(laegemiddelId);
+        Patient p = db.Patienter.Find(patientId)!;
+        Laegemiddel l = db.Laegemiddler.Find(laegemiddelId)!;
 
         DagligFast k = new DagligFast(startDato, slutDato, l, antalMorgen, antalMiddag, antalAften, antalNat);
 
@@ -183,7 +183,6 @@ public class DataService
 
     }
 
-    }
 
     public DagligSkæv OpretDagligSkaev(int patientId, int laegemiddelId, Dosis[] doser, DateTime startDato, DateTime slutDato) {
         // Hent patienten / lægemidlet fra databasen baseret på id
