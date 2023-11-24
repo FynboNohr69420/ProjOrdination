@@ -211,14 +211,12 @@ public class DataService
     //Har været i gang med denne, men ved ikke hvad den skal udføre lol, lige nu kommer den bare med tekst output
     public string AnvendOrdination(int id, Dato dato) {
 
-        Ordination ordination = db.Ordinationer.FirstOrDefault(o => o.OrdinationId == id)!;
+        PN ordination = db.PNs.FirstOrDefault(o => o.OrdinationId == id)!;
 
         if (ordination == null)
         {
             throw new Exception("Fejl: Ordination ikke fundet.");
         }
-
-        
 
         DateTime datoDateTime = dato.dato;
 
@@ -227,9 +225,8 @@ public class DataService
             return "Fejl: Dato uden for gyldighedsperiode.";
         }
 
-        PN pnOrdination = ordination as PN;
+        ordination.dates.Add(dato);
 
-        pnOrdination.dates.Add(dato);
         db.SaveChanges();
 
         return "Ordination anvendt succesfuldt.";
