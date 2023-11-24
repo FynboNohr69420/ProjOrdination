@@ -137,14 +137,14 @@ public class DataService
         return null!;
     }
 
-    public DagligFast OpretDagligFast(int patientId, int laegemiddelId, 
+    public DagligFast OpretDagligFast(int? patientId, int? laegemiddelId, 
         double antalMorgen, double antalMiddag, double antalAften, double antalNat, 
         DateTime startDato, DateTime slutDato)
     {
 
         if (patientId == null || laegemiddelId == null)
         {
-            throw new ArgumentException("Enten patient eller lægemiddel findes ikke");
+            throw new ArgumentNullException("Enten patient eller lægemiddel findes ikke");
         }
 
         Patient p = db.Patienter.Find(patientId);
