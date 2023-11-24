@@ -159,9 +159,25 @@ public class DataService
 
     }
 
-    public DagligSkæv OpretDagligSkaev(int patientId, int laegemiddelId, Dosis[] doser, DateTime startDato, DateTime slutDato) {
-        // TODO: Implement!
-        return null!;
+    public DagligSkæv OpretDagligSkaev(int patientId, int laegemiddelId, Dosis[] doser, DateTime startDato, DateTime slutDato)
+    {
+        if (patientId == null || laegemiddelId == null)
+        {
+            throw new ArgumentException("Enten patient eller lægemiddel findes ikke");
+        }
+
+        Patient p = db.Patienter.Find(patientId);
+        Laegemiddel l = db.Laegemiddler.Find(laegemiddelId);
+
+        DagligSkæv dagligSkæv = new DagligSkæv(startDato, slutDato, l);
+
+        // Assign the doses to the dagligSkæv instance
+        dagligSkæv.doser = doser.ToList();
+
+        p.ordinationer.Add(dagligSkæv);
+        db.SaveChanges();
+
+        return dagligSkæv;
     }
 
     public string AnvendOrdination(int id, Dato dato) {
