@@ -4,6 +4,7 @@ using System.Text.Json;
 using shared.Model;
 using static shared.Util;
 using Data;
+using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 
 namespace Service;
 
@@ -65,12 +66,13 @@ public class DataService
             Laegemiddel[] lm = db.Laegemiddler.ToArray();
             Patient[] p = db.Patienter.ToArray();
 
-            ordinationer[0] = new PN(new DateTime(2021, 1, 1), new DateTime(2021, 1, 12), 123, lm[1]);    
-            ordinationer[1] = new PN(new DateTime(2021, 2, 12), new DateTime(2021, 2, 14), 3, lm[0]);    
-            ordinationer[2] = new PN(new DateTime(2021, 1, 20), new DateTime(2021, 1, 25), 5, lm[2]);    
-            ordinationer[3] = new PN(new DateTime(2021, 1, 1), new DateTime(2021, 1, 12), 123, lm[1]);
-            ordinationer[4] = new DagligFast(new DateTime(2021, 1, 10), new DateTime(2021, 1, 12), lm[1], 2, 0, 1, 0);
-            ordinationer[5] = new DagligSkæv(new DateTime(2021, 1, 23), new DateTime(2021, 1, 24), lm[2]);
+            //Alle datoer herunder ændret fra 2021 til 2023
+            ordinationer[0] = new PN(new DateTime(2023, 1, 1), new DateTime(2023, 1, 12), 123, lm[1]);    
+            ordinationer[1] = new PN(new DateTime(2023, 2, 12), new DateTime(2023, 2, 14), 3, lm[0]);    
+            ordinationer[2] = new PN(new DateTime(2023, 1, 20), new DateTime(2023, 1, 25), 5, lm[2]);    
+            ordinationer[3] = new PN(new DateTime(2023, 1, 1), new DateTime(2023, 1, 12), 123, lm[1]);
+            ordinationer[4] = new DagligFast(new DateTime(2023, 1, 10), new DateTime(2023, 1, 12), lm[1], 2, 0, 1, 0);
+            ordinationer[5] = new DagligSkæv(new DateTime(2023, 1, 23), new DateTime(2023, 1, 24), lm[2]);
             
             ((DagligSkæv) ordinationer[5]).doser = new Dosis[] { 
                 new Dosis(CreateTimeOnly(12, 0, 0), 0.5),
@@ -164,25 +166,22 @@ public class DataService
         DateTime startDato, DateTime slutDato)
     {
 
-        // Hent patienten fra databasen baseret på patientId
-        Patient patient = db.Patienter.FirstOrDefault(p => p.PatientId == patientId)!;
+        if (patientId == null || laegemiddelId == null)
+        {
+            throw new ArgumentException("Enten patient eller lægemiddel findes ikke");
+        }
 
-        // Hent lægemidlet fra databasen baseret på laegemiddelId
-        Laegemiddel laegemiddel = db.Laegemiddler.FirstOrDefault(l => l.LaegemiddelId == laegemiddelId)!;
+        Patient p = db.Patienter.Find(patientId);
+        Laegemiddel l = db.Laegemiddler.Find(laegemiddelId);
 
-       
-            // Opret en ny DagligFast instans og tildel dosisværdierne
-            DagligFast nyDagligFast = new DagligFast(startDato, slutDato, laegemiddel, antalMorgen, antalMiddag, antalAften, antalNat);
+        DagligFast k = new DagligFast(startDato, slutDato, l, antalMorgen, antalMiddag, antalAften, antalNat);
 
-            //// Gem den nye ordination i databasen
-            //db.Ordinationer.Add(nyDagligFast);
-            //db.SaveChanges();
+        p.ordinationer.Add(k);
+        db.SaveChanges();
 
-            // Tilføj ordinationen til patientens liste af ordinationer
-            patient.ordinationer.Add(nyDagligFast);
-            db.SaveChanges();
+        return k;
 
-            return nyDagligFast;
+    }
 
     }
 
