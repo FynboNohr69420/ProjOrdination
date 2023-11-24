@@ -42,7 +42,6 @@ public class ServiceTest
     }
 
     [TestMethod]
-    [ExpectedException(typeof(ArgumentNullException))]
     public void TestAtKodenSmiderEnException()
     {
         // Herunder skal man så kalde noget kode,
@@ -51,6 +50,9 @@ public class ServiceTest
         // Hvis koden _ikke_ smider en exception,
         // så fejler testen.
 
-        Console.WriteLine("Her kommer der ikke en exception. Testen fejler.");
+        Laegemiddel lm = service.GetLaegemidler().First();
+
+        Assert.ThrowsException<ArgumentNullException>(() =>
+            service.OpretDagligFast(null, lm.LaegemiddelId, 2, 2, 1, 0, DateTime.Now, DateTime.Now.AddDays(3)));
     }
 }
