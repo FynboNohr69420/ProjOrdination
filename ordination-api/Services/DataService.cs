@@ -133,8 +133,32 @@ public class DataService
     }
 
     public PN OpretPN(int patientId, int laegemiddelId, double antal, DateTime startDato, DateTime slutDato) {
-        // TODO: Implement!
-        return null!;
+
+       
+
+        // Hent patienten / lægemidlet fra databasen baseret på id
+        Patient patient = db.Patienter.FirstOrDefault(p => p.PatientId == patientId)!;
+        Laegemiddel laegemiddel = db.Laegemiddler.FirstOrDefault(l => l.LaegemiddelId == laegemiddelId)!;
+
+        //kan også bruges??
+        //Patient patient = db.Patienter.Find(patientId);
+        //Laegemiddel laegemiddel = db.Laegemiddler.Find(laegemiddelId);
+
+        // Hvis patient eller lægemiddel ikke findes, så smid en exception
+        if (patient == null || laegemiddel == null)
+        {
+            // Håndter fejlen, f.eks. ved at returnere null eller kaste en exception
+            throw new Exception("Fejl: Patient eller lægemiddel ikke fundet i databasen.");
+        }
+    
+
+        PN nyPN = new PN(startDato, slutDato, antal, laegemiddel);
+
+        patient.ordinationer.Add(nyPN);
+
+        db.SaveChanges();
+
+        return nyPN;
     }
 
     public DagligFast OpretDagligFast(int? patientId, int? laegemiddelId, 
@@ -159,14 +183,47 @@ public class DataService
 
     }
 
-    public DagligSkæv OpretDagligSkaev(int patientId, int laegemiddelId, Dosis[] doser, DateTime startDato, DateTime slutDato) {
-        // TODO: Implement!
-        return null!;
     }
 
+    public DagligSkæv OpretDagligSkaev(int patientId, int laegemiddelId, Dosis[] doser, DateTime startDato, DateTime slutDato) {
+        // Hent patienten / lægemidlet fra databasen baseret på id
+        Patient patient = db.Patienter.FirstOrDefault(p => p.PatientId == patientId)!;
+        Laegemiddel laegemiddel = db.Laegemiddler.FirstOrDefault(l => l.LaegemiddelId == laegemiddelId)!;
+
+        // Hvis patient eller lægemiddel ikke findes, så smid en exception
+        if (patient == null || laegemiddel == null)
+        {
+            // Håndter fejlen, f.eks. ved at returnere null eller kaste en exception
+            throw new Exception("Fejl: Patient eller lægemiddel ikke fundet i databasen.");
+        }
+
+        DagligSkæv nyDagligSkæv = new DagligSkæv(startDato, slutDato, laegemiddel, doser);
+
+        patient.ordinationer.Add(nyDagligSkæv);
+        db.SaveChanges();
+
+        return nyDagligSkæv;
+        
+    }
+    //Har været i gang med denne, men ved ikke hvad den skal udføre lol, lige nu kommer den bare med tekst output
     public string AnvendOrdination(int id, Dato dato) {
-        // TODO: Implement!
-        return null!;
+
+        Ordination ordination = db.Ordinationer.FirstOrDefault(o => o.OrdinationId == id)!;
+
+        if (ordination == null)
+        {
+            throw new Exception("Fejl: Ordination ikke fundet.");
+        }
+
+
+        DateTime datoDateTime = dato.dato;
+
+        if (datoDateTime < ordination.startDen || datoDateTime > ordination.slutDen)
+        {
+            return "Fejl: Dato uden for gyldighedsperiode.";
+        }
+
+        return "Ordination anvendt succesfuldt.";
     }
 
     /// <summary>
@@ -176,6 +233,8 @@ public class DataService
     /// <param name="patient"></param>
     /// <param name="laegemiddel"></param>
     /// <returns></returns>
+    /// 
+
 	public double GetAnbefaletDosisPerDøgn(int patientId, int laegemiddelId) {
         // TODO: Implement!
         return -1;
