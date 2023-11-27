@@ -24,17 +24,14 @@ public class PN : Ordination {
     }
 
     public override double doegnDosis() {
-    	//double sum = 0;
+    	
+        int gangeAnvendt = dates.Count;
 
-        //if(dates.Count() > 0)
-        //{
-        //   DateTime min = datesFirst().dato;
-        //   DateTime max = datesLast().dato;
+        double startTilSlutDato = (slutDen - startDen).TotalDays;
 
-        //   foreach
+        double doegnDosis = (gangeAnvendt * antalEnheder) / startTilSlutDato;
 
-        //}
-        return -1;
+        return doegnDosis;
     }
 
 
