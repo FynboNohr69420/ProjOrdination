@@ -20,9 +20,12 @@ public abstract class Ordination {
     /// <summary>
     /// Antal hele dage mellem startdato og slutdato. Begge dage inklusive.
     /// </summary>
-    public int antalDage() {
-        // TODO: Implement!
-        return -1;
+    public int antalDage()
+    {
+
+        int startTilSlutDato = Convert.ToInt32((slutDen - startDen).TotalDays); //Konverterer til int da der formegentlig ikke laves ordinationer på fraktioner af et døgn
+
+        return startTilSlutDato;
     }
 
     public override String ToString() {
@@ -32,15 +35,15 @@ public abstract class Ordination {
     /// <summary>
     /// Returnerer den totale dosis der er givet i den periode ordinationen er gyldig
     /// </summary>
-    public abstract double samletDosis();
+    public abstract double samletDosis(); //Arver fra den specifikke klasse .kfn
 
     /// <summary>
     /// Returnerer den gennemsnitlige dosis givet pr dag i den periode ordinationen er gyldig
     /// </summary>
-    public abstract double doegnDosis();
+    public abstract double doegnDosis(); //Arver fra den specifikke klasse .kfn
 
     /// <summary>
     /// Returnerer ordinationstypen som en String
     /// </summary>
-    public abstract String getType();
+    public abstract String getType(); //Arver fra den specifikke klasse .kfn
 }

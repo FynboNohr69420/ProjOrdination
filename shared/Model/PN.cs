@@ -27,7 +27,7 @@ public class PN : Ordination {
     	
         int gangeAnvendt = dates.Count;
 
-        double startTilSlutDato = (slutDen - startDen).TotalDays;
+        int startTilSlutDato = Convert.ToInt32((slutDen - startDen).TotalDays); //Konverterer til int da der formegentlig ikke laves ordinationer på fraktioner af et døgn
 
         double doegnDosis = (gangeAnvendt * antalEnheder) / startTilSlutDato;
 
