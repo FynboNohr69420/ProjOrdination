@@ -58,7 +58,7 @@ public class ServiceTest
 
         // TC 5: Kast Exception hvis Slutdato ligger før Startdato
         Assert.ThrowsException<InvalidOperationException>(() =>
-            service.OpretDagligFast(104, lm.LaegemiddelId, 2, -4, 1, 0, DateTime.Now, DateTime.Now.AddDays(3)));
+            service.OpretDagligFast(104, lm.LaegemiddelId, 2, 1, 1, 0, DateTime.Now.AddDays(3), DateTime.Now));
 
     }
 
