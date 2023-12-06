@@ -165,7 +165,7 @@ public class DataService
         double antalMorgen, double antalMiddag, double antalAften, double antalNat, 
         DateTime startDato, DateTime slutDato)
     {
-        //Bruges kun MÅSKE på et underligt api kald??
+
         if (patientId == null || laegemiddelId == null)
         {
             throw new ArgumentNullException("Enten patient eller lægemiddel findes ikke");
@@ -205,7 +205,24 @@ public class DataService
         if (patient == null || laegemiddel == null)
         {
             // Håndter fejlen, f.eks. ved at returnere null eller kaste en exception
-            throw new Exception("Fejl: Patient eller lægemiddel ikke fundet i databasen.");
+            throw new InvalidOperationException("Fejl: Patient eller lægemiddel ikke fundet i databasen.");
+        }
+
+        // Validere at startdato ikke er i fortiden
+        if (startDato < DateTime.Today)
+        {
+            throw new InvalidOperationException("Ordineringen kan ikke have startdato i fortiden");
+        }
+
+        if (slutDato < startDato)
+        {
+            throw new InvalidOperationException("Slutdato kan ikke ligge før Startdato");
+        }
+
+        // Validere at doser ikke er negativ
+        if (doser.Any(d => d.antal < 0))
+        {
+            throw new InvalidOperationException("Dosis kan ikke være negativ");
         }
 
         DagligSkæv nyDagligSkæv = new DagligSkæv(startDato, slutDato, laegemiddel, doser);

@@ -58,8 +58,50 @@ public class ServiceTest
 
         // TC 5: Kast Exception hvis Slutdato ligger før Startdato
         Assert.ThrowsException<InvalidOperationException>(() =>
-            service.OpretDagligFast(104, lm.LaegemiddelId, 2, 1, 1, 0, DateTime.Now.AddDays(3), DateTime.Now));
+            service.OpretDagligFast(2, lm.LaegemiddelId, 2, 1, 1, 0, DateTime.Now.AddDays(3), DateTime.Now));
 
+    }
+
+    [TestMethod]
+    
+    public void OpretDagligSkaev()
+    {
+        DateTime dateInPast = new DateTime(2023, 11, 23, 0, 0, 0);
+
+        Patient patient = service.GetPatienter().First();
+        Laegemiddel lm = service.GetLaegemidler().First();
+
+        Assert.AreEqual(1, service.GetDagligSkæve().Count());
+
+        service.OpretDagligSkaev(patient.PatientId, lm.LaegemiddelId,
+                       new Dosis[] { new Dosis(DateTime.Now, 2), new Dosis(DateTime.Now.AddHours(1), 2) }, DateTime.Now, DateTime.Now.AddDays(3));
+
+        //TC6: Tjekker om der bliver oprettet en ny ordination
+        Assert.AreEqual(2, service.GetDagligSkæve().Count());
+
+        //TC7: Kast Exception hvis patient ikke eksisterer
+        Assert.ThrowsException<InvalidOperationException>(() =>
+                   service.OpretDagligSkaev(104, lm.LaegemiddelId,
+                                  new Dosis[] { new Dosis(DateTime.Now, 2), new Dosis(DateTime.Now.AddHours(1), 2) },
+                                DateTime.Now, DateTime.Now.AddDays(3)));
+
+        //TC8: Kast Exception hvis antal er negativ
+        Assert.ThrowsException<InvalidOperationException>(() =>
+                   service.OpretDagligSkaev(patient.PatientId, lm.LaegemiddelId,
+                                  new Dosis[] { new Dosis(DateTime.Now, 2), new Dosis(DateTime.Now.AddHours(1), -2) }, DateTime.Now, DateTime.Now.AddDays(3)));
+
+
+        //TC9: Kast Exception hvis dato ligger før dags dato
+        Assert.ThrowsException<InvalidOperationException>(() =>
+                   service.OpretDagligSkaev(2, lm.LaegemiddelId,
+                                  new Dosis[] { new Dosis(DateTime.Now, 2), new Dosis(DateTime.Now.AddHours(1), 2) },
+                                dateInPast, DateTime.Now.AddDays(3)));
+
+        //TC10: Kast Exception hvis Slutdato ligger før Startdato
+        Assert.ThrowsException<InvalidOperationException>(() =>
+                   service.OpretDagligSkaev(2, lm.LaegemiddelId,
+                                  new Dosis[] { new Dosis(DateTime.Now, 2), new Dosis(DateTime.Now.AddHours(1), 2) },
+                                DateTime.Now.AddDays(3), DateTime.Now));
     }
 
     [TestMethod]
