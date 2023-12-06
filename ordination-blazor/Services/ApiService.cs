@@ -59,12 +59,20 @@ public class ApiService
         double antalMorgen, double antalMiddag, double antalAften, double antalNat, 
         DateTime startDato, DateTime slutDato) {
 
-        string url = $"{baseAPI}ordinationer/dagligfast/";
-        DagligFastDTO opret = new(patientId, laegemiddelId, antalMorgen, antalMiddag, antalAften, antalNat, startDato, slutDato);
-        HttpResponseMessage res = await http.PostAsJsonAsync<DagligFastDTO>(url, opret);
-        string json = res.Content.ReadAsStringAsync().Result;
-        DagligFast newDagligFast = JsonSerializer.Deserialize<DagligFast>(json)!;
-        return newDagligFast;
+        try
+        {
+            string url = $"{baseAPI}ordinationer/dagligfast/";
+            DagligFastDTO opret = new(patientId, laegemiddelId, antalMorgen, antalMiddag, antalAften, antalNat, startDato, slutDato);
+            HttpResponseMessage res = await http.PostAsJsonAsync<DagligFastDTO>(url, opret);
+            string json = res.Content.ReadAsStringAsync().Result;
+            DagligFast newDagligFast = JsonSerializer.Deserialize<DagligFast>(json)!;
+            return newDagligFast;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("An error occurred: " + ex.Message);
+            return null;
+        }
     }
 
     public async Task<DagligSkæv> OpretDagligSkaev(int patientId, int laegemiddelId,
