@@ -174,6 +174,10 @@ public class DataService
         {
             throw new InvalidOperationException("Ordineringen kan ikke have startdato i fortiden");
         }
+        if (antalAften < 0 || antalMorgen < 0 || antalMiddag < 0 || antalNat < 0)
+        {
+            throw new InvalidOperationException("Dosering kan ikke være mindre end 0");
+        }
 
         Patient p = db.Patienter.Find(patientId)!;
         Laegemiddel l = db.Laegemiddler.Find(laegemiddelId)!;
