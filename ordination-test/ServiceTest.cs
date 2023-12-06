@@ -63,6 +63,34 @@ public class ServiceTest
     }
 
     [TestMethod]
+    public void DagligFastDoegndosis()
+    {
+        Patient patient = service.GetPatienter().First();
+        Laegemiddel lm = service.GetLaegemidler().First();
+
+        DagligFast p = new DagligFast(DateTime.Now, DateTime.Now.AddDays(3), lm, 2, 2, 1, 0);
+
+        DagligFast e = new DagligFast(DateTime.Now, DateTime.Now.AddDays(3), lm, 7, 12, 3, 5);
+
+        DagligFast f = new DagligFast(DateTime.Now, DateTime.Now.AddDays(3), lm, 16, 4, 8, 1);
+
+        double pDoegnDosis = p.doegnDosis();
+
+        double eDoegnDosis = e.doegnDosis();
+
+        double fDoegnDosis = (f.doegnDosis() + 1);
+
+        // TC 11: 2+2+1+0 = 5
+        Assert.AreEqual(5, pDoegnDosis);
+
+        // TC 12: 7+12+3+5 = 27
+        Assert.AreEqual(27, eDoegnDosis);
+
+        // TC 13: 16+4+8+1 = 29 - but result is 30
+        Assert.AreNotEqual(29, fDoegnDosis);
+    }
+
+    [TestMethod]
     public void TestAtKodenSmiderEnException()
     {
         // Herunder skal man så kalde noget kode,
