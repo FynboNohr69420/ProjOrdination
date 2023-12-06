@@ -23,7 +23,7 @@ public abstract class Ordination {
     public int antalDage()
     {
 
-        int startTilSlutDato = Convert.ToInt32((slutDen - startDen).TotalDays); //Konverterer til int da der formegentlig ikke laves ordinationer på fraktioner af et døgn
+        int startTilSlutDato = Convert.ToInt32((slutDen - startDen).TotalDays); //Konverterer til int da der formegentlig ikke laves ordinationer pï¿½ fraktioner af et dï¿½gn
 
         return startTilSlutDato;
     }

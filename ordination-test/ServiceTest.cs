@@ -26,7 +26,7 @@ public class ServiceTest
     {
         Assert.IsNotNull(service.GetPatienter());
     }
-
+    
     [TestMethod]
     public void OpretDagligFast()
     {
@@ -35,20 +35,20 @@ public class ServiceTest
         Patient patient = service.GetPatienter().First();
         Laegemiddel lm = service.GetLaegemidler().First();
 
-
+        
         Assert.AreEqual(1, service.GetDagligFaste().Count());
 
         service.OpretDagligFast(patient.PatientId, lm.LaegemiddelId,
             2, 2, 1, 0, DateTime.Now, DateTime.Now.AddDays(3));
 
-        //TC 1: All values valid, new DagligFast created
+        //TC1: Tjekker om der bliver oprettet en ny ordination
         Assert.AreEqual(2, service.GetDagligFaste().Count());
 
-        // TC 2: Kast Exception hvis antal er negativ
+        //TC2: Kast Exception hvis antal er negativ
         Assert.ThrowsException<InvalidOperationException>(() =>
             service.OpretDagligFast(patient.PatientId, lm.LaegemiddelId, 2, -4, 1, 0, DateTime.Now, DateTime.Now.AddDays(3)));
 
-        // TC 3: Kast Exception hvis patient ikke eksisterer
+        //TC3: Kast Exception hvis patient ikke eksisterer
         Assert.ThrowsException<InvalidOperationException>(() =>
             service.OpretDagligFast(104, lm.LaegemiddelId, 2, -4, 1, 0, DateTime.Now, DateTime.Now.AddDays(3)));
 
@@ -61,7 +61,6 @@ public class ServiceTest
             service.OpretDagligFast(104, lm.LaegemiddelId, 2, -4, 1, 0, DateTime.Now, DateTime.Now.AddDays(3)));
 
     }
-
 
     [TestMethod]
     public void TestAtKodenSmiderEnException()
