@@ -20,13 +20,13 @@ public class ServiceTest
         service = new DataService(context);
         service.SeedData();
     }
-
+    //TC1
     [TestMethod]
     public void PatientsExist()
     {
         Assert.IsNotNull(service.GetPatienter());
     }
-
+    //TC2
     [TestMethod]
     public void OpretDagligFast()
     {
@@ -48,7 +48,7 @@ public class ServiceTest
 
     }
 
-
+    //TC3
     [TestMethod]
     public void TestAtKodenSmiderEnException()
     {

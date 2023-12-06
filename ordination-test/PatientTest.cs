@@ -5,7 +5,7 @@ using shared.Model;
 [TestClass]
 public class PatientTest
 {
-
+    //TC4
     [TestMethod]
     public void PatientHasName()
     {
@@ -17,7 +17,7 @@ public class PatientTest
         Assert.AreEqual(navn, patient.navn);
     }
 
-
+    //TC5
     [TestMethod]
     public void TestDerAltidFejler()
     {
