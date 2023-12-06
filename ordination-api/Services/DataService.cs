@@ -178,6 +178,10 @@ public class DataService
         {
             throw new InvalidOperationException("Dosering kan ikke være mindre end 0");
         }
+        if (slutDato < startDato)
+        {
+            throw new InvalidOperationException("Slutdato kan ikke ligge før Startdato");
+        }
 
         Patient p = db.Patienter.Find(patientId)!;
         Laegemiddel l = db.Laegemiddler.Find(laegemiddelId)!;

@@ -35,26 +35,30 @@ public class ServiceTest
         Patient patient = service.GetPatienter().First();
         Laegemiddel lm = service.GetLaegemidler().First();
 
+
         Assert.AreEqual(1, service.GetDagligFaste().Count());
 
         service.OpretDagligFast(patient.PatientId, lm.LaegemiddelId,
             2, 2, 1, 0, DateTime.Now, DateTime.Now.AddDays(3));
 
+        //TC 1: All values valid, new DagligFast created
         Assert.AreEqual(2, service.GetDagligFaste().Count());
 
-        // Kast Exception hvis dato ligger før dags dato
-        Assert.ThrowsException<InvalidOperationException>(() =>
-            service.OpretDagligFast(2, lm.LaegemiddelId, 2, 2, 1, 0, dateInPast, DateTime.Now.AddDays(3)));
-
-        // Kast Exception hvis antal er negativ
+        // TC 2: Kast Exception hvis antal er negativ
         Assert.ThrowsException<InvalidOperationException>(() =>
             service.OpretDagligFast(patient.PatientId, lm.LaegemiddelId, 2, -4, 1, 0, DateTime.Now, DateTime.Now.AddDays(3)));
 
-        // Kast Exception hvis patient ikke eksisterer
+        // TC 3: Kast Exception hvis patient ikke eksisterer
         Assert.ThrowsException<InvalidOperationException>(() =>
             service.OpretDagligFast(104, lm.LaegemiddelId, 2, -4, 1, 0, DateTime.Now, DateTime.Now.AddDays(3)));
 
-        
+        //TC 4: Kast Exception hvis dato ligger før dags dato
+        Assert.ThrowsException<InvalidOperationException>(() =>
+            service.OpretDagligFast(2, lm.LaegemiddelId, 2, 2, 1, 0, dateInPast, DateTime.Now.AddDays(3)));
+
+        // TC 5: Kast Exception hvis Slutdato ligger før Startdato
+        Assert.ThrowsException<InvalidOperationException>(() =>
+            service.OpretDagligFast(104, lm.LaegemiddelId, 2, -4, 1, 0, DateTime.Now, DateTime.Now.AddDays(3)));
 
     }
 
